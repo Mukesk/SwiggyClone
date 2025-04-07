@@ -5,7 +5,7 @@ import CatCard from "./catCard";
 import { useQuery } from "@tanstack/react-query"
 import axios from "axios";
 import baseUrl from "../constant/baseUrl";
-
+import ProductCard from "./productCard";
 const Home = () => {
     const {data:items,isLoading} = useQuery({
         queryKey:["items"],
@@ -26,6 +26,10 @@ const Home = () => {
    " Non-Veg": "./images/nonveg.png",
     Beverage: "./images/brevage.png",
   };
+  const handleAddToCart = () => {
+    console.log("Item added to cart!");
+  };
+  
 
   return (
     <div>
@@ -51,23 +55,32 @@ const Home = () => {
         ))}
       </div>
       
-    {cat.map((cats)=>(
+    {Object.entries(cat).map((cats)=>(
       <div>
-       <div className="text-3xl text-center mt-6 font-bold">{cats}</div>
+       <div className="text-3xl text-center mt-6 font-bold">{cats[0]}</div>
         <div className="flex flex-wrap justify-center gap-5 mt-4">
-         {items?.filter((item) => item.category === cats).map((item) => (
-        <div key={item._id} className="flex flex-col items-center bg-white shadow-lg rounded-lg p-4 m-2 w-1/4">
-          <img src={item.image} alt={item.name} className="w-full h-40 object-cover rounded-t-lg" />
-          <h2 className="text-xl font-semibold mt-2">{item.name}</h2>
-          <p className="text-gray-600 mt-1">{item.description}</p>
-          <p className="text-lg font-bold mt-2">₹{item.price}</p>
-          <button className="bg-orange-400 text-white px-4 py-2 rounded mt-3">Add to Cart</button>
-        </div>
+         {items?.items?.filter((item) => item.category === cats).map((item) => (
+          <ProductCard
+          title={item.name}
+          description={item.description}
+        
+          price={item.price}
+          key={item._id}
+          isNew={true}
+          image={item.image}
+          onAddToCart={handleAddToCart}
+        />
+     
         ))}
       </div>
       </div>
       ))}
+    
+
+
+
     </div>
+
 
   );
 };

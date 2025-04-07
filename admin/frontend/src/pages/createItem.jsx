@@ -138,12 +138,12 @@ const CreateItem = () => {
                     required
                   >
                     <option>Select category</option>
-                    <option value="bakery">Bakery</option>
-                    <option value="pizza">Pizza</option>
-                    <option value="nonveg">Non-Veg</option>
-                    <option value="veg">Veg</option>
-                    <option value="burger">Burger</option>
-                    <option value="beverage">Beverage</option>
+                    <option value="Bakery">Bakery</option>
+                    <option value="Pizza">Pizza</option>
+                    <option value="Nonveg">Non-Veg</option>
+                    <option value="Veg">Veg</option>
+                    <option value="Burger">Burger</option>
+                    <option value="Beverage">Beverage</option>
                   </select>
                 </div>
 
