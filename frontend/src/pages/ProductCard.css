@@ -1,5 +1,5 @@
 .fresh-card {
-    width: 360px;
+    width: 240px;
     background: #ffffff;
     border-radius: 20px;
     overflow: hidden;
@@ -18,7 +18,7 @@
   .fresh-image-container {
     position: relative;
     overflow: hidden;
-    height: 240px;
+    height: 160px;
   }
   
   .fresh-image {

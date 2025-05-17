@@ -6,7 +6,8 @@ import router from "./routes/auth_Route.js"
 import dotenv from "dotenv"
 import cors from "cors"
 import itemRoute from "./routes/item_route.js"
-
+import stripe from "stripe"
+import paymentRoute from "./routes/payment_route.js"
  dotenv.config()
 const app=express()
 app.use(cookieParser())
@@ -20,7 +21,7 @@ app.use(cors({
 }
    
 ))
-
+app.use("/api/payment",paymentRoute)
 app.use("/api/auth",router)
 app.use("/api/items",itemRoute)
 
