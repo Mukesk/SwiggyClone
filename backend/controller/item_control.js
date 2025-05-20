@@ -4,6 +4,43 @@ import User from "../model/user_model.js";
 const check = (user, id) => {
     return user.cart.some((val) => val.item.equals(id));
 }
+export const removeCartItem = async(req,res)=>{
+    try{
+          const { id } = req.params;
+        const user = await User.findById(req.user._id);
+        const item = await Item.findById(id);
+
+        if (!item) {
+            return res.status(404).json({ error: "Item not found" });
+        }
+
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+          const  exists = user.cart.find((val) => val.item && val.item.equals(id)); // Check if the item already exists in the cart
+        // Toggle item in the cart
+        if (exists) {
+            user.cart = user.cart.filter((val) => !(val.item && val.item.equals(id)));
+        } 
+
+        await user.save();
+
+        res.status(200).json({
+            success: {
+                username: user.username,
+                fullname: user.fullname,
+                cart: user.cart,
+                city: user.address?.city,
+                pincode: user.address?.pincode,
+            },
+        });
+
+    }catch(error){
+return res.status(500).json({ error: `Internal Server Error ${error}` });
+    }
+
+
+}
 export const getItems = async (req, res) => {
     try {
 
@@ -13,6 +50,7 @@ export const getItems = async (req, res) => {
         return res.status(500).json({ error: `Internal Server Error ${error}` });
      }
 }
+
 export const addCartItems = async (req, res) => {
     try {
         const { id } = req.params;

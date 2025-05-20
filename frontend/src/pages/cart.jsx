@@ -15,7 +15,19 @@ const stripePromise = loadStripe("pk_test_51RLdujGIFC7YAJ2piwwzaigrxOGtxUFenfVNV
 const Cart = () => {
   const queryClient = useQueryClient();
   const [totalAmount, setTotalAmount] = useState(0);
+const {mutate:removetitem,isPending:removing}=useMutation({
+  mutationFn:async(id)=>{
+    const res= await axios.post(`${baseUrl}/api/items/removecartitem/${id}`, {},{
+        withCredentials: true,
+      headers: { "Content-Type": "application/json" },
+      });
+      return res.data;
 
+  },
+  onSuccess: () => {
+      queryClient.invalidateQueries(["cartItems"]);
+    }
+})
   const { data, isLoading } = useQuery({
     queryKey: ["cartItems"],
     queryFn: async () => {
@@ -112,7 +124,8 @@ const Cart = () => {
                 <p>{(isDecrementPending||isIncrementPending?<Loader/>: item.quantity)}</p>
                 <button className={" text-amber-50 bg-orange-400   rounded m-2"}  onClick={() => decrement(item._id)}>-</button>
               </div>
-            </div>
+             
+            </div> <div onClick={()=>removetitem(item._id)} className={"rounded p-2 me-3 text-amber-50 bg-orange-400  "}>remove</div>
           </div>
         </div>
       )) }
