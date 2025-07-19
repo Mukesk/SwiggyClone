@@ -49,6 +49,7 @@ export const login= async (req,res)=>{
         generateCookie(user._id,res)
          
         return res.status(200).json({
+            
             username: user.username,
             fullname:user.fullname,
             password:user.password,
