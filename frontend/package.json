@@ -7,7 +7,12 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+ 
+  "build": "react-scripts build",
+  "start": "react-scripts start"
+
+
   },
   "dependencies": {
     "@stripe/stripe-js": "^7.3.0",
