@@ -1,5 +1,5 @@
 import mongoDb, { MongoClient, ObjectId } from 'mongodb'
-import  bcrypt from "bycrptjs"
+import  bcrypt from "bcryptjs"
 import generateCookie from '../utils/generateCookie.js'
 import Item from '../model/item_model.js'
 import cloudinary from './config/cloundinary.js'

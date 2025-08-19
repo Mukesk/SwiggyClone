@@ -1,5 +1,5 @@
 import User from "../model/user_model.js"
-import bcrypt from "bycrptjs"
+import bcrypt from "bcryptjs"
 import generateCookie from "../utils/generateCookie.js"
 
 export const signUp= async (req,res)=>{
