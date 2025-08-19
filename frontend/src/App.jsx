@@ -4,14 +4,14 @@ import Login from './pages/login'
 import Home from './pages/home'
 import Signup from './pages/signup'
 import Cart from './pages/cart'
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom' 
+
 import { useQuery } from '@tanstack/react-query'
 import baseUrl from './constant/baseUrl'
 import axios from 'axios'
-import PaymentSuccess from './pages/paymentsuccess'
+import PaymentSuccess from './pages/paymentsuccess.jsx'
 import PaymentFailed from './pages/paymentfailed'
-//import PaymentSuccess from "./pages/paymentsuccess"
-//import PaymentFailed from './pages/paymentfalied'
+
 function App() {
   const { data: userData, isLoading, error } = useQuery({
     queryKey: ['authUser'],
