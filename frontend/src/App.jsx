@@ -8,8 +8,8 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router'
 import { useQuery } from '@tanstack/react-query'
 import baseUrl from './constant/baseUrl'
 import axios from 'axios'
-import PaymentSuccess from './pages/Paymentsuccess'
-import PaymentFailed from './pages/Paymentfailed'
+import PaymentSuccess from './pages/paymentsuccess'
+import PaymentFailed from './pages/paymentfailed'
 //import PaymentSuccess from "./pages/paymentsuccess"
 //import PaymentFailed from './pages/paymentfalied'
 function App() {
