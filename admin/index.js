@@ -13,7 +13,7 @@ app.use(cookieParser());
 // ✅ Use CORS Middleware Before Routes
 app.use(
   cors({
-    origin: "http://localhost:5173", // Frontend URL
+    origin: "https://swiggy-clone-7tcu4f5wa-mukesks-projects.vercel.app", // Frontend URL
     methods: "GET, POST, PUT, DELETE, OPTIONS",
     allowedHeaders: "Content-Type, Authorization",
     credentials: true, // Required for cookies/auth
