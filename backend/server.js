@@ -14,7 +14,7 @@ app.use(cookieParser())
 
 app.use(express.json())
 app.use(cors({
-    origin:"https://swiggy-clone-psi-liard.vercel.app/",
+    origin:"https://swiggy-clone-psi-liard.vercel.app",
     methods:"GET,POST,PUT,DELETE,OPTIONS",
     allowedHeaders:"Content-Type,Authorization",
     credentials:true
