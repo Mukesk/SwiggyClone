@@ -1,2 +1,2 @@
-const baseUrl = 'https://swiggyclone-backend-y2gx.onrender.com';
+const baseUrl = 'http://localhost:3000';
 export default baseUrl
