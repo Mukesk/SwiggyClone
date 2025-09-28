@@ -1,9 +1,19 @@
 import React from "react";
 
 const CatCard = ({ cat, imgSrc }) => {
+  const scrollToCategory = () => {
+    const categoryElement = document.getElementById(`category-${cat}`);
+    if (categoryElement) {
+      categoryElement.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
+
   return (
     <div className="flex justify-center items-center">
-      <div className="group cursor-pointer">
+      <div className="group cursor-pointer" onClick={scrollToCategory}>
         <div className="relative bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 border border-gray-100 w-40 h-40 flex flex-col items-center justify-center">
           {/* Background gradient on hover */}
           <div className="absolute inset-0 bg-gradient-to-br from-orange-400/10 to-orange-500/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
