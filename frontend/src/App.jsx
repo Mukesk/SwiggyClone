@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import './App.css'
 import Login from './pages/login'
 import Home from './pages/home'
@@ -10,49 +9,98 @@ import baseUrl from './constant/baseUrl'
 import axios from 'axios'
 import PaymentSuccess from './pages/Paymentsuccess'
 import PaymentFailed from './pages/Paymentfailed'
-//import PaymentSuccess from "./pages/paymentsuccess"
-//import PaymentFailed from './pages/paymentfalied'
+import LoadingSpinner from './components/LoadingSpinner'
+import { Toaster } from 'react-hot-toast'
+import ErrorBoundary from './components/ErrorBoundary'
 function App() {
-  const { data: userData, isLoading, error } = useQuery({
+  const { data: userData, isLoading } = useQuery({
     queryKey: ['authUser'],
     queryFn: async () => {
-      const res = await axios.get(`${baseUrl}/api/auth/me`, {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-      })
-      console.log(res.data )
-      return res.data
+      try {
+        const res = await axios.get(`${baseUrl}/api/auth/me`, {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        })
+        return res.data
+      } catch (error) {
+        // Return null if authentication fails
+        if (error.response?.status === 401) {
+          // Clear any stored auth data
+          console.log('Authentication failed, redirecting to login');
+          return null
+        }
+        throw error
+      }
     },
-    onSuccess: (data) => {
-      console.log(data)
-      console.log('User data fetched successfully')
-    }
+    retry: 1,
+    refetchOnWindowFocus: false
   })
 
   if (isLoading) {
-    return <h1>Loading...</h1>
+    return <LoadingSpinner message="Authenticating..." />
   }
 
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* Protected Home Route */}
-        <Route path="/" element={userData ? <Home /> : <Navigate to="/login" />} />
+    <ErrorBoundary>
+      <BrowserRouter>
+        <Routes>
+          {/* Public Home Route (accessible to all with dynamic features based on auth) */}
+          <Route path="/" element={<Home />} />
 
-        {/* Public Routes (accessible only when not logged in) */}
-        <Route path="/login" element={!userData ? <Login /> : <Navigate to="/" />} />
-        <Route path="/signup" element={!userData ? <Signup /> : <Navigate to="/" />} />
+          {/* Auth Routes (accessible only when not logged in) */}
+          <Route path="/login" element={!userData ? <Login /> : <Navigate to="/" />} />
+          <Route path="/signup" element={!userData ? <Signup /> : <Navigate to="/" />} />
 
-        {/* Protected Cart Route */}
-        <Route path="/cart" element={userData ? <Cart /> : <Navigate to="/login" />} />
-<Route path="/success" element={<PaymentSuccess/>}/>
-        <Route path="/failed" element={<PaymentFailed/>}/>
-        {/* Catch-all Route */}
-        <Route path="*" element={<Navigate to="/" />} />
+          {/* Protected Cart Route */}
+          <Route path="/cart" element={userData ? <Cart /> : <Navigate to="/login" />} />
+          <Route path="/success" element={<PaymentSuccess/>}/>
+          <Route path="/failed" element={<PaymentFailed/>}/>
+          {/* Catch-all Route */}
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
         
-        
-      </Routes>
-    </BrowserRouter>
+        {/* Toast Notifications */}
+        <Toaster 
+          position="top-center"
+          reverseOrder={false}
+          gutter={8}
+          containerClassName=""
+          containerStyle={{
+            top: 80, // Account for navbar height
+          }}
+          toastOptions={{
+            duration: 2500,
+            style: {
+              background: '#363636',
+              color: '#fff',
+              borderRadius: '8px',
+              fontSize: '14px',
+              fontWeight: '500',
+              maxWidth: '400px',
+              padding: '12px 16px',
+            },
+            success: {
+              style: {
+                background: '#10B981',
+              },
+              iconTheme: {
+                primary: '#fff',
+                secondary: '#10B981',
+              },
+            },
+            error: {
+              style: {
+                background: '#EF4444',
+              },
+              iconTheme: {
+                primary: '#fff',
+                secondary: '#EF4444',
+              },
+            },
+          }}
+        />
+      </BrowserRouter>
+    </ErrorBoundary>
   )
 }
 

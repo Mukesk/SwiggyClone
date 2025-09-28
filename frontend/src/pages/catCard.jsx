@@ -2,32 +2,57 @@ import React from "react";
 
 const CatCard = ({ cat, imgSrc }) => {
   return (
-    <div className="flex justify-center items-center bg-gray-100">
-      <a
-        href="#"
-        className="relative h-[321px] w-[220px] bg-white rounded-tr-lg overflow-hidden flex flex-col justify-center items-center shadow-lg transition-all duration-300 ease-out hover:scale-[1.005] hover:-translate-y-1 hover:shadow-2xl group"
-      >
-        {/* Hover Overlay */}
-        <div className="absolute w-[118px] h-[118px] bg-orange-400 rounded-full top-[70px] left-[50px] transition-transform duration-300 ease-out group-hover:scale-[4]"></div>
-
-        {/* Circle with Image */}
-        <div className="relative flex justify-center items-center w-[131px] h-[131px] bg-white border-4 border-orange-400 rounded-full transition-all duration-300 ease-out group-hover:bg-[#DCE9FF] group-hover:border-[#f1f7ff]">
-          <div className="absolute w-[118px] h-[118px] bg-orange-400 rounded-full transition-opacity duration-300 ease-out group-hover:bg-[#f1f7ff]"></div>
-
-          <img
-            src={imgSrc}
-            alt={cat}
-            className="relative z-10 w-[px] h-[77px] object-cover rounded-full"
-          />
+    <div className="flex justify-center items-center">
+      <div className="group cursor-pointer">
+        <div className="relative bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 border border-gray-100 w-40 h-40 flex flex-col items-center justify-center">
+          {/* Background gradient on hover */}
+          <div className="absolute inset-0 bg-gradient-to-br from-orange-400/10 to-orange-500/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          
+          {/* Icon/Image Container */}
+          <div className="relative z-10 mb-3">
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-orange-400 to-orange-500 flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
+              {imgSrc ? (
+                <img
+                  src={imgSrc}
+                  alt={cat}
+                  className="w-10 h-10 object-cover rounded-full filter brightness-0 invert"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.nextSibling.style.display = 'block';
+                  }}
+                />
+              ) : null}
+              <span className="text-2xl text-white font-bold" style={{display: imgSrc ? 'none' : 'block'}}>
+                {getCategoryIcon(cat)}
+              </span>
+            </div>
+          </div>
+          
+          {/* Category Name */}
+          <h3 className="relative z-10 text-center font-semibold text-gray-800 group-hover:text-orange-600 transition-colors duration-300 text-sm leading-tight">
+            {cat}
+          </h3>
         </div>
-
-        {/* Text */}
-        <p className="mt-8 text-lg text-gray-700 transition-colors duration-300 ease-out group-hover:text-[#4C5656]">
-          {cat}
-        </p>
-      </a>
+      </div>
     </div>
   );
+};
+
+// Function to get category icons
+const getCategoryIcon = (category) => {
+  const icons = {
+    'Biryani': '🍚',
+    'Pizza': '🍕',
+    'Burger': '🍔',
+    'Veg': '🥗',
+    'Non-Veg': '🍗',
+    'Beverage': '🥤',
+    'Bakery': '🧁',
+    'Dessert': '🍰',
+    'Chinese': '🥢',
+    'Indian': '🍛'
+  };
+  return icons[category] || '🍽️';
 };
 
 export default CatCard;
