@@ -31,10 +31,10 @@ app.use(cookieParser())
 // CORS configuration
 app.use(cors({
     origin: process.env.NODE_ENV === 'production' 
-        ? process.env.FRONTEND_URL 
+        ? [process.env.FRONTEND_URL, "https://swiggyclone-9rhm.onrender.com"]
         : "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
     credentials: true,
     optionsSuccessStatus: 200
 }))
