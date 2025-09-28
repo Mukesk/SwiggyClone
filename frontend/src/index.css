@@ -1,9 +1,9 @@
+/* Import layout fixes */
+@import './pages/layout-fixes.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* Import layout fixes */
-@import './pages/layout-fixes.css';
 
 /* Global Styles and Layout Fixes */
 * {
