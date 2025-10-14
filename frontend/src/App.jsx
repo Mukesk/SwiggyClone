@@ -17,32 +17,38 @@ import PaymentFailed from './pages/paymentfailed'
 import LoadingSpinner from './components/LoadingSpinner'
 import { Toaster } from 'react-hot-toast'
 import ErrorBoundary from './components/ErrorBoundary'
+import { useState, useEffect } from 'react'
 function App() {
-  const { data: userData, isLoading } = useQuery({
-    queryKey: ['authUser'],
-    queryFn: async () => {
+  const [authChecked, setAuthChecked] = useState(false);
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    const checkAuth = async () => {
       try {
+        console.log('Checking authentication...');
         const res = await axios.get(`${baseUrl}/api/auth/me`, {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
-        })
-        return res.data
+          timeout: 5000 // 5 second timeout
+        });
+        console.log('Authentication successful:', res.data);
+        setUserData(res.data);
       } catch (error) {
-        // Return null if authentication fails
-        if (error.response?.status === 401) {
-          // Clear any stored auth data
-          console.log('Authentication failed, redirecting to login');
-          return null
-        }
-        throw error
+        console.log('Authentication failed or skipped:', error.message);
+        setUserData(null);
+      } finally {
+        setAuthChecked(true);
       }
-    },
-    retry: 1,
-    refetchOnWindowFocus: false
-  })
+    };
 
-  if (isLoading) {
-    return <LoadingSpinner message="Authenticating..." />
+    // Add a minimum loading time to prevent flashing
+    setTimeout(() => {
+      checkAuth();
+    }, 1000);
+  }, []);
+
+  if (!authChecked) {
+    return <LoadingSpinner message="Loading BiteMe..." />;
   }
 
   return (

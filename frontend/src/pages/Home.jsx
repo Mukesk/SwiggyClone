@@ -297,93 +297,167 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Mobile Navigation Menu */}
+            {/* Enhanced Mobile Navigation Menu */}
         {isMenuOpen && (
-          <div className="md:hidden bg-orange-600 border-t border-orange-400">
-            <div className="px-2 pt-2 pb-3 space-y-1">
+          <div className="md:hidden bg-gradient-to-b from-orange-600 to-orange-700 border-t border-orange-400 shadow-lg">
+            <div className="px-4 pt-4 pb-6 space-y-2">
+              {/* Mobile User Info */}
+              {user && (
+                <div className="bg-orange-500/30 rounded-lg p-3 mb-4 border border-orange-400/30">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                      <CiUser className="text-white text-xl" />
+                    </div>
+                    <div>
+                      <p className="text-white font-semibold text-sm">Welcome back!</p>
+                      <p className="text-orange-100 text-xs">{user.username}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
               <Link
                 to="/"
-                className="flex items-center px-3 py-2 text-white hover:bg-orange-500 rounded-lg transition-colors duration-200"
+                className="flex items-center px-4 py-3 text-white hover:bg-orange-500/50 rounded-xl transition-all duration-200 group"
                 onClick={() => setIsMenuOpen(false)}
               >
-                <CiHome className="mr-2 text-xl" />
-                Home
+                <CiHome className="mr-3 text-xl group-hover:scale-110 transition-transform" />
+                <span className="font-medium">Home</span>
               </Link>
               
               <Link
                 to="/cart"
-                className="flex items-center px-3 py-2 text-white hover:bg-orange-500 rounded-lg transition-colors duration-200 relative"
+                className="flex items-center justify-between px-4 py-3 text-white hover:bg-orange-500/50 rounded-xl transition-all duration-200 group"
                 onClick={() => setIsMenuOpen(false)}
               >
                 <div className="flex items-center">
-                  <TiShoppingCart className="mr-2 text-xl" />
-                  Cart
-                  {cartItems?.items?.length > 0 && (
-                    <span className="ml-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                      {cartItems.items.length}
-                    </span>
-                  )}
+                  <TiShoppingCart className="mr-3 text-xl group-hover:scale-110 transition-transform" />
+                  <span className="font-medium">My Cart</span>
                 </div>
+                {cartItems?.items?.length > 0 && (
+                  <span className="bg-red-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center font-bold animate-pulse">
+                    {cartItems.items.length}
+                  </span>
+                )}
               </Link>
 
               {user ? (
                 <>
                   <Link
                     to="/profile"
-                    className="flex items-center px-3 py-2 text-white hover:bg-orange-500 rounded-lg transition-colors duration-200"
+                    className="flex items-center px-4 py-3 text-white hover:bg-orange-500/50 rounded-xl transition-all duration-200 group"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    <CiUser className="mr-2 text-xl" />
-                    Profile ({user.username})
+                    <CiUser className="mr-3 text-xl group-hover:scale-110 transition-transform" />
+                    <span className="font-medium">My Profile</span>
                   </Link>
-                  <button
-                    onClick={() => {
-                      handleLogout();
-                      setIsMenuOpen(false);
-                    }}
-                    className="flex items-center w-full px-3 py-2 text-white hover:bg-red-500 rounded-lg transition-colors duration-200"
-                  >
-                    <CiLogout className="mr-2 text-xl" />
-                    Logout
-                  </button>
+                  
+                  <div className="border-t border-orange-500/30 mt-4 pt-4">
+                    <button
+                      onClick={() => {
+                        handleLogout();
+                        setIsMenuOpen(false);
+                      }}
+                      className="flex items-center w-full px-4 py-3 text-white bg-red-500/20 hover:bg-red-500/30 rounded-xl transition-all duration-200 group border border-red-400/30"
+                    >
+                      <CiLogout className="mr-3 text-xl group-hover:scale-110 transition-transform" />
+                      <span className="font-medium">Logout</span>
+                    </button>
+                  </div>
                 </>
               ) : (
-                <Link
-                  to="/login"
-                  className="flex items-center px-3 py-2 bg-white text-orange-500 hover:bg-orange-50 rounded-lg transition-colors duration-200 font-semibold"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Login
-                </Link>
+                <div className="border-t border-orange-500/30 mt-4 pt-4 space-y-2">
+                  <Link
+                    to="/login"
+                    className="flex items-center justify-center w-full px-4 py-3 bg-white text-orange-600 hover:bg-orange-50 rounded-xl transition-all duration-200 font-semibold shadow-lg transform hover:scale-105"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <span>Sign In</span>
+                  </Link>
+                  <Link
+                    to="/signup"
+                    className="flex items-center justify-center w-full px-4 py-3 border-2 border-white text-white hover:bg-white hover:text-orange-600 rounded-xl transition-all duration-200 font-semibold transform hover:scale-105"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <span>Sign Up</span>
+                  </Link>
+                </div>
               )}
             </div>
           </div>
         )}
       </nav>
 
-      {/* Search Suggestions */}
+      {/* Enhanced Search Suggestions with Add to Cart */}
       {focused && srchItem.trim() !== "" && (
-        <div className="absolute top-16 left-1/2 transform -translate-x-1/2 w-full max-w-md mx-4 bg-white rounded-lg shadow-xl border border-gray-200 z-40 overflow-hidden">
+        <div className="absolute top-16 left-1/2 transform -translate-x-1/2 w-full max-w-lg mx-4 bg-white rounded-lg shadow-xl border border-gray-200 z-40 overflow-hidden">
           {filteredItems.length > 0 ? (
             <>
               <div className="px-4 py-2 bg-orange-50 border-b border-orange-100">
                 <p className="text-sm text-gray-600 font-medium">Found {filteredItems.length} results</p>
               </div>
-              <div className="max-h-64 overflow-y-auto">
-                {filteredItems.map((item) => (
-                  <div
-                    key={item._id}
-                    className="flex items-center justify-between px-4 py-3 hover:bg-orange-50 transition-colors duration-150 cursor-pointer border-b border-gray-100 last:border-b-0"
-                  >
-                    <div className="flex items-center space-x-3">
-                      <div className="w-6 h-6 bg-orange-100 rounded-full flex items-center justify-center">
-                        <span className="text-orange-500 text-xs">🍽️</span>
+              <div className="max-h-80 overflow-y-auto">
+                {filteredItems.map((item) => {
+                  const isInCart = cartItems?.items?.some(
+                    ({_id}) => _id.toString() === item._id.toString()
+                  );
+                  
+                  const handleAddToCart = async (e) => {
+                    e.stopPropagation();
+                    if (!user) {
+                      showErrorToast("Please login to add items to cart");
+                      navigate('/login');
+                      return;
+                    }
+                    
+                    try {
+                      await axios.post(`${baseUrl}/api/items/additems`, 
+                        { id: item._id },
+                        {
+                          headers: { "Content-Type": "application/json" },
+                          withCredentials: true,
+                        }
+                      );
+                      queryClient.invalidateQueries(["cartItems"]);
+                      showSuccessToast(`${item.itemname} added to cart!`);
+                    } catch (error) {
+                      showErrorToast("Error adding item to cart");
+                    }
+                  };
+                  
+                  return (
+                    <div
+                      key={item._id}
+                      className="flex items-center justify-between px-4 py-3 hover:bg-orange-50 transition-colors duration-150 border-b border-gray-100 last:border-b-0"
+                    >
+                      <div className="flex items-center space-x-3 flex-1">
+                        <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
+                          <span className="text-orange-500 text-sm">🍽️</span>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-gray-800 font-medium text-sm truncate">{item.itemname}</p>
+                          <p className="text-gray-500 text-xs truncate">{item.description}</p>
+                        </div>
                       </div>
-                      <span className="text-gray-800 font-medium text-sm">{item.itemname}</span>
+                      <div className="flex items-center space-x-3 flex-shrink-0">
+                        <span className="text-orange-500 font-bold text-sm">₹{item.price}</span>
+                        {isInCart ? (
+                          <span className="bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs font-medium">
+                            Added ✓
+                          </span>
+                        ) : (
+                          <button
+                            onClick={handleAddToCart}
+                            className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded-full text-xs font-medium transition-colors duration-200 flex items-center space-x-1"
+                          >
+                            <span>+</span>
+                            <span>Add</span>
+                          </button>
+                        )}
+                      </div>
                     </div>
-                    <span className="text-orange-500 font-bold text-sm">₹{item.price}</span>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </>
           ) : (
@@ -459,7 +533,7 @@ const Home = () => {
             if (categoryItems.length === 0) return null;
             
             return (
-              <section key={category} className="py-16 border-b border-gray-100 last:border-b-0">
+              <section key={category} id={`category-${category}`} className="py-16 border-b border-gray-100 last:border-b-0">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                   {/* Category Header */}
                   <div className="text-center mb-12">
