@@ -1,0 +1,139 @@
+version: '3.8'
+
+services:
+  # Customer Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - MONGODB_ADDRESS=${MONGODB_ADDRESS}
+      - SECRET_JWT=${SECRET_JWT}
+      - STRIPE_KEY=${STRIPE_KEY}
+      - FRONTEND_URL=${FRONTEND_URL}
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+    networks:
+      - biteme-network
+    volumes:
+      - backend-logs:/app/logs
+
+  # Admin Backend API
+  admin:
+    build:
+      context: ./admin
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - NODE_ENV=production
+      - PORT=8000
+      - MONGODB_ADDRESS=${MONGODB_ADDRESS}
+      - SECRET_KEY=${ADMIN_SECRET_KEY}
+      - CLOUDINARY_URL=${CLOUDINARY_URL}
+      - CLOUD_NAME=${CLOUD_NAME}
+      - API_SECRET=${API_SECRET}
+      - API_KEY=${API_KEY}
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+    networks:
+      - biteme-network
+    volumes:
+      - admin-logs:/app/logs
+
+  # Customer Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=${BACKEND_URL}
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - biteme-network
+
+  # Admin Frontend  
+  admin-frontend:
+    build:
+      context: ./admin/frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=${ADMIN_BACKEND_URL}
+    ports:
+      - "8080:80"
+    depends_on:
+      - admin
+    restart: unless-stopped
+    networks:
+      - biteme-network
+
+  # MongoDB Database
+  mongodb:
+    image: mongo:7-jammy
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=biteme
+    volumes:
+      - mongodb-data:/data/db
+      - mongodb-config:/data/configdb
+    restart: unless-stopped
+    networks:
+      - biteme-network
+
+  # Redis for Caching (Optional)
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    networks:
+      - biteme-network
+    command: redis-server --appendonly yes
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - frontend
+      - admin-frontend
+      - backend
+      - admin
+    restart: unless-stopped
+    networks:
+      - biteme-network
+
+networks:
+  biteme-network:
+    driver: bridge
+
+volumes:
+  mongodb-data:
+    driver: local
+  mongodb-config:
+    driver: local
+  redis-data:
+    driver: local
+  backend-logs:
+    driver: local
+  admin-logs:
+    driver: local

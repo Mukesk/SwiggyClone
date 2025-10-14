@@ -25,7 +25,14 @@ export const signUp= async (req,res)=>{
         })
         await newUser.save()
          generateCookie(newUser._id,res)
-        return res.status(200).json({username: newUser.username,fullname:newUser.fullname,password:newUser.password,city:newUser.address.city,pincode:newUser.address.pincode})
+        return res.status(200).json({
+            _id: newUser._id,
+            username: newUser.username,
+            fullname: newUser.fullname,
+            city: newUser.address.city,
+            pincode: newUser.address.pincode,
+            phoneno: newUser.phoneno
+        })
     
       
 
@@ -49,13 +56,12 @@ export const login= async (req,res)=>{
         generateCookie(user._id,res)
          
         return res.status(200).json({
-            
+            _id: user._id,
             username: user.username,
-            fullname:user.fullname,
-            password:user.password,
-            city:user.address.city,
-            pincode:user.address.pincode
-             
+            fullname: user.fullname,
+            city: user.address.city,
+            pincode: user.address.pincode,
+            phoneno: user.phoneno
         })
       
     } catch (error) {
@@ -92,12 +98,12 @@ export const getme=async(req,res)=>{
         const id=req.user._id
         const user = await User.findById(id)
         res.status(200).json({
+            _id: user._id,
             username: user.username,
-            fullname:user.fullname,
-          
-            city:user.address.city,
-            pincode:user.address.pincode
-             
+            fullname: user.fullname,
+            city: user.address.city,
+            pincode: user.address.pincode,
+            phoneno: user.phoneno
         })
 
     } catch (error) {

@@ -4,7 +4,7 @@ import User from "../model/user_model.js";
 const protectCookie = async (req, res, next) => {
     try {
     
-        const token = req.cookies?.jvt;
+        const token = req.cookies?.jwt;
         if (!token) {
           return res.status(401).json({ Error: "Unauthorized: No token provided" });
       }
@@ -24,7 +24,17 @@ const protectCookie = async (req, res, next) => {
 
     } catch (error) {
         console.error(`Authentication error: ${error.message}`);
-        return res.status(401).json({ Error: "Unauthorized: Invalid token" });
+        
+        // Clear invalid cookie
+        res.cookie("jwt", "", {
+            httpOnly: true,
+            expires: new Date(0)
+        });
+        
+        return res.status(401).json({ 
+            Error: "Unauthorized: Invalid token",
+            message: "Please log in again"
+        });
     }
 };
 

@@ -20,7 +20,7 @@ export const login = async(req,res)=>{
          if (!isAdmin){
             return res.status(404).json({"Error":"Unauthorized entry check username"})
          }
-         const ispass= bcrypt.compare(password,isAdmin.password)
+         const ispass = await bcrypt.compare(password, isAdmin.password)
          if (!ispass ){
             return res.status(404).json({"Error":"Unauthorized entry check password"})
 
